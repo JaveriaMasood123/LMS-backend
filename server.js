@@ -22,7 +22,7 @@ const app = express();
 // ✅ Allowed frontend origins
 const allowedOrigins = [
   'http://localhost:5173',
-  // 'https://lms-frontend-zeta-seven.vercel.app',
+  'https://lms-frontend-siql.vercel.app',
 ];
 
 // ✅ CORS configuration
