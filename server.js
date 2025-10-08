@@ -10,36 +10,54 @@ import authRoutes from './routes/authRoutes.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
+// ✅ Load environment variables
 dotenv.config();
 
+// ✅ ES module dirname setup
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
 
-// ✅ CORS - update with your frontend port
+// ✅ Allowed frontend origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  // 'https://lms-frontend-zeta-seven.vercel.app',
+];
+
+// ✅ CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5174',
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser requests
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error(`CORS policy: Origin ${origin} not allowed`), false);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// ✅ Body parser for JSON
+// ✅ Handle preflight requests safely
+app.options(/.*/, cors());
+
+// ✅ Body parser
 app.use(express.json());
 
-// Connect DB
+// ✅ Connect to MongoDB
 connectDB();
 
-// ✅ Static folder for uploads
+// ✅ Static folder for file uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
+// ✅ API Routes
 app.use('/api/courses', courseRoutes);
 app.use('/api/teachers', teacherRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/auth', authRoutes);
 
-// Health check
-app.get('/', (req, res) => res.send('LMS backend running'));
+// ✅ Health check route
+app.get('/', (req, res) => res.send('✅ LMS Backend is running successfully!'));
 
-// Start server
+// ✅ Start the server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
