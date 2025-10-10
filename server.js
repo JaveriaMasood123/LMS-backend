@@ -21,7 +21,8 @@ const app = express();
 
 // ✅ Allowed frontend origins
 const allowedOrigins = [
-  'http://localhost:5173'
+  'http://localhost:5173',
+  "https://lms-frontend-nine-jet.vercel.app"
 ];
 
 // ✅ CORS configuration
