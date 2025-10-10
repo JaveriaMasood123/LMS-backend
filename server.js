@@ -21,8 +21,7 @@ const app = express();
 
 // ✅ Allowed frontend origins
 const allowedOrigins = [
-  'http://localhost:5173',
-  'https://lms-frontend-5s2q.vercel.app',
+  'http://localhost:5173'
 ];
 
 // ✅ CORS configuration
